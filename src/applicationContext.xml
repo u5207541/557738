@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="testSpringtt" class="com.b2c.testSpring">
+		<property name="memberService" ref="memberServiceTarget"></property>
+	</bean>
+	<bean
+		id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property
+			name="configLocation"
+			value="classpath:hibernate.cfg.xml">
+		</property>
+	</bean>
+	<!-- service -->
+	
+	<bean
+		id="basesServiceTarget"
+		class="com.b2c.service.BasesServiceImp">
+		<property
+			name="baseDao"
+			ref="baseDao"></property>
+	</bean>
+	<bean
+		id="baseService"
+		parent="uuService">
+		<property
+			name="target"
+			ref="basesServiceTarget"></property>
+	</bean>
+	<bean
+		id="couponsServiceTarget"
+		class="com.b2c.service.CouponsService">
+		<property
+			name="baseDao"
+			ref="couponsDao"></property>
+	</bean>
+	
+	<bean
+		id="couponsService"
+		parent="uuService">
+		<property
+			name="target"
+			ref="couponsServiceTarget"></property>
+	</bean>
+	
+	<bean
+		id="memberOrderServiceTarget"
+		class="com.b2c.service.MemberOrderService">
+		<property
+			name="baseDao"
+			ref="memberOrderDao"></property>
+	</bean>
+	
+	<bean
+		id="memberOrderService"
+		parent="uuService">
+		<property
+			name="target"
+			ref="memberOrderServiceTarget"></property>
+	</bean>
+
+	<bean
+		id="memberServiceTarget"
+		class="com.b2c.service.MemberService">
+		<property
+			name="baseDao"
+			ref="memberDao"></property>
+	</bean>
+	
+	<bean
+		id="memberService"
+		parent="uuService">
+		<property
+			name="target"
+			ref="memberServiceTarget"></property>
+	</bean>
+	
+	<bean
+		id="productServiceTarget"
+		class="com.b2c.service.ProductService">
+		<property
+			name="baseDao"
+			ref="productDao"></property>
+	</bean>
+	
+	<bean
+		id="productService"
+		parent="uuService">
+		<property
+			name="target"
+			ref="productServiceTarget"></property>
+	</bean>
+	
+	<!-- Dao -->
+	<bean
+		id="baseDao"
+		class="com.b2c.dao.BaseDaoImp">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory"></property>
+	</bean>
+
+	<bean
+		id="couponsDao"
+		class="com.b2c.dao.CouponsDao">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory"></property>
+		<property
+			name="modelName"
+			value="com.b2c.model.Coupons"></property>
+	</bean>
+
+	<bean
+		id="memberDao"
+		class="com.b2c.dao.MemberDao">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory"></property>
+		<property
+			name="modelName"
+			value="com.b2c.model.Member"></property>
+	</bean>
+
+	<bean
+		id="memberOrderDao"
+		class="com.b2c.dao.MemberOrderDao">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory"></property>
+		<property
+			name="modelName"
+			value="com.b2c.model.MemberOrder"></property>
+	</bean>
+
+	<bean
+		id="productDao"
+		class="com.b2c.dao.ProductDao">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory"></property>
+		<property
+			name="modelName"
+			value="com.b2c.model.product"></property>
+	</bean>
+
+	<!--事务管理 -->
+	<bean
+		id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property
+			name="sessionFactory"
+			ref="sessionFactory"></property>
+	</bean>
+	<bean
+		id="uuService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		lazy-init="true" abstract="true">
+		<property
+			name="transactionManager"
+			ref="transactionManager"></property>
+		<property
+			name="transactionAttributes">
+			<props>
+				<prop
+					key="add*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="copy*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="update*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="save*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="init*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="clone*">PROPAGATION_REQUIRED</prop>
+				<prop
+					key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+</beans>
