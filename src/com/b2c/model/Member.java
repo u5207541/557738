@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+//你好的 a
 @Entity
 @Table(name = "member_infos")
 public class Member extends BaseModel{
